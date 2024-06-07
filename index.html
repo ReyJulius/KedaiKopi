@@ -1,216 +1,200 @@
 <!DOCTYPE html>
 <html lang="en">
-  <head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Kedai Kopi</title>
 
-    <!-- Fonts -->
-    <link rel="preconnect" href="https://fonts.googleapis.com" />
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-    <link
-      href="https://fonts.googleapis.com/css2?family=Poppins:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&display=swap"
-      rel="stylesheet"
-    />
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Kedai Kopi</title>
 
-    <!-- Icon -->
-    <script src="https://unpkg.com/feather-icons"></script>
+  <!-- Fonts -->
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link
+    href="https://fonts.googleapis.com/css2?family=Poppins:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&display=swap"
+    rel="stylesheet" />
 
-    <!-- My Style -->
-    <link rel="stylesheet" href="css/style.css" />
-  </head>
+  <!-- Icon -->
+  <script src="https://unpkg.com/feather-icons"></script>
 
-  <body>
-    <!-- Navbar Start -->
-    <nav class="navbar">
-      <a href="#" class="navbar-logo">Kedai<span>Kopi.</span></a>
+  <!-- My Style -->
+  <link rel="stylesheet" href="css/style.css" />
+  <!-- Alpine JS -->
+  <script defer src="https://cdn.jsdelivr.net/npm/alpinejs@3.x.x/dist/cdn.min.js"></script>
+  <!-- App -->
+  <script src="src/app.js"></script>
+</head>
 
-      <div class="navbar-nav">
-        <a href="#home">Home</a>
-        <a href="#about">About</a>
-        <a href="#menu">Menu</a>
-        <a href="#contact">Contact</a>
-      </div>
+<body>
+  <!-- Navbar Start -->
+  <nav class="navbar" x-data>
+    <a href="#" class="navbar-logo">Kedai<span>Kopi.</span></a>
 
-      <div class="navbar-extra">
-        <a href="#" id="search-btn"><i data-feather="search"></i></a>
-        <a href="#" id="shopping-cart-btn"><i data-feather="shopping-cart"></i></a>
-        <a href="#" id="hamburger-menu"><i data-feather="menu"></i></a>
-      </div>
+    <div class="navbar-nav">
+      <a href="#home">Home</a>
+      <a href="#about">About</a>
+      <a href="#menu">Menu</a>
+      <a href="#contact">Contact</a>
+    </div>
 
-      <!-- Search Form Start -->
-      <div class="search-form">
-        <input type="search" id="search-box" placeholder="Search Here...">
-        <label for="search-box"><i data-feather="search"></i></label>
-      </div>
-      <!-- Search Form End -->
+    <div class="navbar-extra">
+      <a href="#" id="search-btn"><i data-feather="search"></i></a>
+      <a href="#" id="shopping-cart-btn">
+      <i data-feather="shopping-cart"></i>
+      <span class="quantity-notif" x-show="$store.cart.quantity" x-text="$store.cart.quantity"></span>
+    </a>
+      <a href="#" id="hamburger-menu"><i data-feather="menu"></i></a>
+    </div>
 
-      <!-- Shopping-cart Start -->
-      <div class="shopping-cart">
-        <div class="cart-item">
-          <img src="img/Menu/1.jpg" alt="Product 1">
-          <div class="item-detail">
-            <h3>Product 1</h3>
-            <div class="item-price">IDR 30K</div>
+    <!-- Search Form Start -->
+    <div class="search-form">
+      <input type="search" id="search-box" placeholder="Search Here...">
+      <label for="search-box"><i data-feather="search"></i></label>
+    </div>
+    <!-- Search Form End -->
+
+    <!-- Shopping-cart Start -->
+    <div class="shopping-cart">
+      <template x-for="(item,index) in $store.cart.items" x-key="index">
+      <div class="cart-item">
+        <img :src="`img/Menu/${item.img}`" :alt="item.name">
+        <div class="item-detail">
+          <h3 x-text="item.name"></h3>
+          <div class="item-price">
+            <span x-text="rupiah(item.price)"></span> &times;
+            <button id="remove" @click="$store.cart.remove(item.id)">&minus;</button>
+            <span x-text="item.quantity"></span>
+            <button id="add" @click="$store.cart.add(item)">&plus;</button> &equals;
+            <span x-text="rupiah(item.total)"></span>
           </div>
-          <i data-feather="trash-2" class="remove-item"></i>
-        </div>
-        <div class="cart-item">
-          <img src="img/Menu/1.jpg" alt="Product 1">
-          <div class="item-detail">
-            <h3>Product 2</h3>
-            <div class="item-price">IDR 30K</div>
-          </div>
-          <i data-feather="trash-2" class="remove-item"></i>
-        </div>
-        <div class="cart-item">
-          <img src="img/Menu/1.jpg" alt="Product 1">
-          <div class="item-detail">
-            <h3>Product 3</h3>
-            <div class="item-price">IDR 30K</div>
-          </div>
-          <i data-feather="trash-2" class="remove-item"></i>
         </div>
       </div>
-      <!-- Shopping-cart End -->
-      
-    </nav>
-    <!-- Navbar End -->
+      </template>
+      <h4 x-show="!$store.cart.items.length" style="margin-top:1rem;">Cart is Empty</h4>
+      <h4 x-show="$store.cart.items.length">Total : <span x-text="rupiah($store.cart.total)"></span></h4>
+    </div>
+    <!-- Shopping-cart End -->
 
-    <!-- Hero Section Start -->
-    <section class="hero" id="home">
-      <main class="content">
-        <h1>Let's Enjoy a Cup of <span>Coffee</span></h1>
+  </nav>
+  <!-- Navbar End -->
+
+  <!-- Hero Section Start -->
+  <section class="hero" id="home">
+    <main class="content">
+      <h1>Let's Enjoy a Cup of <span>Coffee</span></h1>
+      <p>
+        Calm your heart and mind with a cup of coffee.
+      </p>
+    </main>
+  </section>
+  <!-- Hero Section End -->
+
+  <!-- About Section Start -->
+  <section id="about" class="about">
+    <h2><span>About</span> Us</h2>
+    <div class="row">
+      <div class="about-img">
+        <img src="img/Coffe about.jpg" alt="AboutUs" />
+      </div>
+      <div class="content">
+        <h3>Why Choose Us?</h3>
         <p>
-          Calm your heart and mind with a cup of coffee.
+          We are the number one coffee shop in Indonesia, offering premium quality coffee with an amazing taste.
         </p>
-      </main>
-    </section>
-    <!-- Hero Section End -->
-
-    <!-- About Section Start -->
-    <section id="about" class="about">
-      <h2><span>About</span> Us</h2>
-      <div class="row">
-        <div class="about-img">
-          <img src="img/Coffe about.jpg" alt="AboutUs" />
-        </div>
-        <div class="content">
-          <h3>Why Choose Us?</h3>
-          <p>
-            We are the number one coffee shop in Indonesia, offering premium quality coffee with an amazing taste.
-          </p>
-          <p>
-            Our coffee comes from plantations grown on fertile land and is certified halal, ensuring its quality.
-          </p>
-        </div>
+        <p>
+          Our coffee comes from plantations grown on fertile land and is certified halal, ensuring its quality.
+        </p>
       </div>
-    </section>
-    <!-- About Section End -->
+    </div>
+  </section>
+  <!-- About Section End -->
 
-    <!-- Menu Section Start -->
-    <section id="menu" class="menu">
-      <h2>Our <span>Menu</span></h2>
-      <p>
-       Here are the selected menu items from our Coffee Shop, featuring the finest quality.
-      </p>
+  <!-- Menu Section Start -->
+  <section id="menu" class="menu" x-data="Products">
+    <h2>Our <span>Menu</span></h2>
+    <p>
+      Here are the selected menu items from our Coffee Shop, featuring the finest quality.
+    </p>
 
-      <div class="row">
+    <div class="row">
+      <template x-for="(item, index) in items" x-key="index">
         <div class="menu-card">
-          <img class="menu-card-img" src="img/Menu/1.jpg" alt="Espresso" />
-          <h3 class="menu-card-title">- Espresso -</h3>
-          <p class="menu-card-price">IDR 15K</p>
-        </div>
-        <div class="menu-card">
-          <img class="menu-card-img" src="img/Menu/1.jpg" alt="Espresso" />
-          <h3 class="menu-card-title">- Americano -</h3>
-          <p class="menu-card-price">IDR 23K</p>
-        </div>
-        <div class="menu-card">
-          <img class="menu-card-img" src="img/Menu/1.jpg" alt="Espresso" />
-          <h3 class="menu-card-title">- Cappuccino -</h3>
-          <p class="menu-card-price">IDR 18K</p>
-        </div>
-        <div class="menu-card">
-          <img class="menu-card-img" src="img/Menu/1.jpg" alt="Espresso" />
-          <h3 class="menu-card-title">- Macchiato -</h3>
-          <p class="menu-card-price">IDR 28K</p>
-        </div>
-        <div class="menu-card">
-          <img class="menu-card-img" src="img/Menu/1.jpg" alt="Espresso" />
-          <h3 class="menu-card-title">- Latte -</h3>
-          <p class="menu-card-price">IDR 17K</p>
-        </div>
-        <div class="menu-card">
-          <img class="menu-card-img" src="img/Menu/1.jpg" alt="Espresso" />
-          <h3 class="menu-card-title">- Cold Brew -</h3>
-          <p class="menu-card-price">IDR 19K</p>
-        </div>
-      </div>
-    </section>
-    <!-- Menu Section End -->
-
-    <!-- Contact Section Start -->
-    <section class="contact" id="contact">
-      <h2><span>Contact</span> Us</h2>
-      <p>
-        You can find our coffee shop on the map below. Please don't forget to leave us your feedback and suggestions. Thank you!
-      </p>
-
-      <div class="row">
-        <iframe class="map"
-          src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d990.0877665319753!2d107.5568663258148!3d-6.967846295561711!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x2e68efdcc26575f9%3A0xb67138b63461482!2sBriquettes%20Energy%20Green!5e0!3m2!1sid!2sid!4v1716168283174!5m2!1sid!2sid"
-          allowfullscreen=""
-          loading="lazy"
-          referrerpolicy="no-referrer-when-downgrade"
-        ></iframe>
-
-        <form action="">
-          <div class="input-group">
-            <i data-feather="user"></i>
-            <input type="text" placeholder="Nama">
+          <img class="menu-card-img" :src="`img/Menu/${item.img}`" :alt="item.name" />
+          <h3 class="menu-card-title" x-text="item.name"></h3>
+          <p class="menu-card-price" x-text="rupiah(item.price)"></p>
+          <div class="product-icons">
+            <a href="#" @click.prevent="$store.cart.add(item)">
+              <svg width="24" height="24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
+                stroke-linejoin="round">
+                <use href="img/feather-sprite.svg#shopping-cart" />
+              </svg>
+            </a>
           </div>
-          <div class="input-group">
-            <i data-feather="mail"></i>
-            <input type="text" placeholder="Email">
-          </div>
-          <div class="input-group">
-            <i data-feather="phone"></i>
-            <input type="text" placeholder="Nomer HP">
-          </div>
-          <button type="submit" class="btn">Kirim Pesan</button>
-        </form>
-      </div>
-    </section>
-    <!-- Contact Section End -->
+        </div>
+      </template>
+    </div>
+  </section>
+  <!-- Menu Section End -->
 
-    <!-- Footer start -->
-    <footer>
-      <div class="socials">
-        <a href="#"><i data-feather="instagram"></i></a>
-        <a href="#"><i data-feather="twitter"></i></a>
-        <a href="#"><i data-feather="youtube"></i></a>
-      </div>
+  <!-- Contact Section Start -->
+  <section class="contact" id="contact">
+    <h2><span>Contact</span> Us</h2>
+    <p>
+      You can find our coffee shop on the map below. Please don't forget to leave us your feedback and suggestions.
+      Thank you!
+    </p>
 
-      <div class="links">
-        <a href="#home">Home</a>
-        <a href="#about">About</a>
-        <a href="#menu">Menu</a>
-        <a href="#contact">Contact</a>
-      </div>
+    <div class="row">
+      <iframe class="map"
+        src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d990.0877665319753!2d107.5568663258148!3d-6.967846295561711!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x2e68efdcc26575f9%3A0xb67138b63461482!2sBriquettes%20Energy%20Green!5e0!3m2!1sid!2sid!4v1716168283174!5m2!1sid!2sid"
+        allowfullscreen="" loading="lazy" referrerpolicy="no-referrer-when-downgrade"></iframe>
 
-      <div class="credit">
-        <p>Created by <a href="">ReyJulius</a>. | &copy; 2023.</p>
-      </div>
-    </footer>
-    <!-- Footer end -->
+      <form action="">
+        <div class="input-group">
+          <i data-feather="user"></i>
+          <input type="text" placeholder="Nama">
+        </div>
+        <div class="input-group">
+          <i data-feather="mail"></i>
+          <input type="text" placeholder="Email">
+        </div>
+        <div class="input-group">
+          <i data-feather="phone"></i>
+          <input type="text" placeholder="Nomer HP">
+        </div>
+        <button type="submit" class="btn">Kirim Pesan</button>
+      </form>
+    </div>
+  </section>
+  <!-- Contact Section End -->
 
-    <!-- Icon -->
-    <script>
-      feather.replace();
-    </script>
+  <!-- Footer start -->
+  <footer>
+    <div class="socials">
+      <a href="#"><i data-feather="instagram"></i></a>
+      <a href="#"><i data-feather="twitter"></i></a>
+      <a href="#"><i data-feather="youtube"></i></a>
+    </div>
 
-    <!-- My Js -->
-    <script src="js/script.js"></script>
-  </body>
+    <div class="links">
+      <a href="#home">Home</a>
+      <a href="#about">About</a>
+      <a href="#menu">Menu</a>
+      <a href="#contact">Contact</a>
+    </div>
+
+    <div class="credit">
+      <p>Created by <a href="">ReyJulius</a>. | &copy; 2023.</p>
+    </div>
+  </footer>
+  <!-- Footer end -->
+
+  <!-- Icon -->
+  <script>
+    feather.replace();
+  </script>
+
+  <!-- My Js -->
+  <script src="js/script.js"></script>
+</body>
+
 </html>

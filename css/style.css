@@ -126,6 +126,21 @@ html{
   color: var(--bg);
 }
 
+#shopping-cart-btn{
+  position: relative;
+}
+
+#shopping-cart-btn .quantity-notif{
+  display: inline-block;
+  padding: 1px 5px;
+  background-color: red;
+  border-radius: 6px;
+  font-size: 0.8rem;
+  position: absolute;
+  top: 0;
+  right: -15px;
+}
+
 .shopping-cart{
   position: absolute;
   top: 100%;
@@ -153,17 +168,28 @@ html{
 }
 
 .shopping-cart img{
-  height: 6rem;
+  height: 4rem;
   border-radius: 50%;
 }
 
 .shopping-cart h3{
-  font-size: 1.6rem;
-  padding-bottom: 0.5rem;
+  font-size: 1.4rem;
 }
 
 .shopping-cart .item-price{
   font-size: 1.2rem;
+}
+
+.shopping-cart .cart-item #add,
+.shopping-cart .cart-item #remove{
+  display: inline-block;
+  padding: 2px 5px;
+  cursor: pointer;
+  margin: 0 8px;
+  background-color: black;
+  color: white;
+  font-weight: bold;
+  font-size: 1.1rem;
 }
 
 .shopping-cart .remove-item{
@@ -174,6 +200,12 @@ html{
 
 .shopping-cart .remove-item:hover{
   color: var(--bg);
+}
+
+.shopping-cart  h4{
+  font-size: 1.6rem;
+  margin-top: -1 rem;
+  text-align: center;
 }
 
 /* Hero Section */
@@ -358,7 +390,36 @@ html{
 }  
 
 .menu .row .menu-card .menu-card-title{
+  font-size: 1.3rem;
   margin: 1rem auto 0.5rem;
+}
+
+.menu .row .menu-card .menu-card-price{
+  font-size: 1rem;
+  font-weight: bold;
+}
+
+.menu .row .menu-card .product-icons{
+  display: flex;
+  justify-content: center;
+  gap: 2rem;
+}
+
+.menu .row .menu-card .product-icons a{
+  width: 4rem;
+  height: 4rem;
+  color: #fff;
+  margin: 0.3rem;
+  border: 1px solid #666;
+  border-radius: 50%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.menu .row .menu-card .product-icons a:hover{
+  background-color: var(--primary);
+  border: 1px solid var(--primary);
 }
 
 /* Contact Section */
